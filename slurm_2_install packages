@@ -1,0 +1,28 @@
+#!/bin/bash
+#SBATCH -A yash_editing
+#SBATCH --ntasks=1
+#SBATCH --partition=standard    
+#SBATCH --account=your_allocation
+#SBATCH --array=1-10
+
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=20G
+#SBATCH -t 0-01:00:00
+#SBATCH -J model_edit
+#SBATCH -o model_edit-%A.out
+#SBATCH -e model_edit-%A.err
+
+module purge
+module load anaconda
+DIR=/scratch/bkr3as/model_nexus/main/
+conda activate nexus_env
+pip install sentencepiece
+pip install deepspeed==0.11.1
+pip install numpy==1.26.1
+pip install PyYAML==6.0.1
+pip install torch==2.0.0
+pip install tqdm==4.66.1
+pip install transformers==4.33.1
+
+export HF_HOME='/scratch/bkr3as/model_nexus/main/'
+python run.py
